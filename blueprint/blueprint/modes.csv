@@ -1,0 +1,7 @@
+Mode,Requirements,Blocked,Floor Min,Floor Max,Basement,Besement Uses Mode,1st Floor Uses Mode,Top Floor Uses Mode,Floor Area Reduction
+House,Bedroom;Bathroom;Kitchen;Living_Room,;,1,2,1,House,House,House,0.75
+Hotel,;,;,,,1,Storage,Hotel_Lobby,Penthouse,1
+Hotel_Lobby,Lobby;,;,,,,,,,1
+Penthouse,;,;,1,1,,,,,1
+Apartment,;,;,3,10,,,,,1
+Storage,;,;,,,,,,,1
