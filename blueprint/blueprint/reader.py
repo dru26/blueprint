@@ -3,6 +3,7 @@ import csv
 from pathlib import Path
 
 def readCSVtoLst(filename, headers = False):
+	'''Reads a .csv filt to a list.'''
 	lst = []
 	with open(Path(__file__).with_name(filename + '.csv')) as file:
 		reader = csv.reader(file)
@@ -26,6 +27,7 @@ def readCSVtoLst(filename, headers = False):
 	return lst
 
 def readCSVtoDict(filename):
+	'''Reads a .csv filt to a dictionary.'''
 	lst = []
 	dct = dict()
 	# Store indoor connections to a dictionary

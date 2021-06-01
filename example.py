@@ -19,6 +19,7 @@ print(b.inspect(1, 1, 0))
 
 # Print the Blueprint to the console
 b.print()
+
 # Create a temporary image of the Blueprint
 b.show()
 # Save an image of the blueprint to 'floorplan.png'
@@ -26,4 +27,9 @@ b.save('floorplan')
 # Clear the blueprint of all annotations
 b.clear()
 # Print the empty blueprint
+b.print()
+
+# Enable optimizations and reprint the blueprint to see the differences
+b.enableOptimizations()
+b.plot(HOUSE)
 b.print()

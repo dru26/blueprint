@@ -68,18 +68,23 @@ class RoomSpace:
 		canvas.rectangle((x, y, x + w, y + h), fill = color, outline = (255, 255, 255))
 
 	def area(self):
+		'''Returns the total area of the space.'''
 		return self.width * self.height
 
 	def flip(self):
+		'''Rotates the space 90 degrees, effectively swapping the width and height.'''
 		self.width, self.height = self.height, self.width
 
 	def setPos(self, point):
+		'''Sets the initial upper-left position of the room in 2D space'''
 		self._offset = point
 
 	def getLabel(self):
+		'''Returns the label that this space belongs to'''
 		return self.parent.label
 
 	def extend(self, direction, distance):
+		'''Extends the space in a single direction by a certain distance.'''
 		if direction == 'x':
 			old_width = self.width
 			self.width += distance
@@ -89,11 +94,16 @@ class RoomSpace:
 			self.height += distance
 			return (self.x(), self.x() + self.width, self.y() + old_height, self.y() + self.height)
 
-	def x(self): return self._offset.x
+	def x(self):
+		'''Returns the x position of the space in 2D space.'''
+		return self._offset.x
 
-	def y(self): return self._offset.y
+	def y(self):
+		'''Returns the y position of the space in 2D space.'''
+		return self._offset.y
 
 	def size(self):
+		'''Returns the size of the size of the space as a tuple.'''
 		return (int(self.width), int(self.height))
 
 # Construct the ROOM_TYPES and ROOM_SPECS dictionaries from the ROOMS list
@@ -110,6 +120,7 @@ for mode in modes:
 del modes
 
 def getRooms(mode):
+	'''Returns a list of rooms that have been randomized from the given mode.'''
 	global MODES, ROOM_SPECS, ROOM_TYPES, FAILS
 	rooms = []
 	for room in MODES[mode][0]:
@@ -122,6 +133,7 @@ def getRooms(mode):
 	return rooms
 
 def getRandomRoom():
+	'''Returns a random room.'''
 	global MODES, ROOM_SPECS, ROOM_TYPES
 	name = random.choice(list(ROOM_SPECS.keys()))
 	specs = ROOM_SPECS[name]
@@ -130,6 +142,7 @@ def getRandomRoom():
 	return rs
 
 def isValid(size):
+	'''Checks if the given size tuple is large enough for any room to fit inside.'''
 	if size[0] < MIN_LENGTH: return False
 	if size[1] < MIN_LENGTH: return False
 	return True

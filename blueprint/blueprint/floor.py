@@ -64,18 +64,18 @@ class Floor:
 
 	def assign(self, x, y, value):
 		'''Sets a certain postion on the floor to the given value. All varibales
-		   must be ints or floats. This function is not safe, so all coordinates must
-		   first be manually checked with self.inBounds()'''
+			must be ints or floats. This function is not safe, so all coordinates must
+			first be manually checked with self.inBounds()'''
 		self._grid[int(y)][int(x)] = value
 
 	def get(self, point):
 		'''Gets a certain postion on the floor. This function is not safe,
-		   so all coordinates must first be manually checked with self.inBounds()'''
+			so all coordinates must first be manually checked with self.inBounds()'''
 		return self._grid[int(point.y)][int(point.x)]
 
 	def fill(self, point, size, room_id):
 		'''Fills an area at a point given its size and a label. This function is
-		   not safe, and bounds must be checked with self.inBounds()'''
+			not safe, and bounds must be checked with self.inBounds()'''
 		# Add horizontal top and bottom lines
 		for x in range(size[0]):
 			# Attempt to erase if a room is being extended and FAST is enabled
@@ -107,6 +107,8 @@ class Floor:
 					self.assign(x, y, room_id)
 
 	def extend(self, point, direction, distance):
+		'''Finds the space at a given point and extends it in the given direction.
+			Also updates the floor's visuals'''
 		# Extend the room's space
 		char = self.get(point)
 		space = self._spaces[char]
@@ -116,7 +118,7 @@ class Floor:
 
 	def getSpaceAt(self, point):
 		'''Returns a point relative to the given point of the theoretical maximum size
-		a room could be if inserted at this point, only considering'''
+			a room could be if inserted at this point, only considering'''
 		if not self.inBounds(point): return None
 		endx, endy = 0, 0
 		while endx + point.x < self.width() and self.get(point + (endx, 0)) == 0:
@@ -127,6 +129,8 @@ class Floor:
 		return (endx, endy)
 
 	def fits(self, point, size, checkFlip = True):
+		'''Returns 1 if the given space fits at the point, -1 if it fits when
+			rotated, or 0 if it does not fit.'''
 		if not self.inBounds(point + Point(size[0] - 1, size[1] - 1)): return 0
 		for x in range(size[0]):
 			if self.get(Point(point.x + x, point.y)) != 0:
@@ -139,12 +143,15 @@ class Floor:
 		return 1 if checkFlip else -1
 
 	def width(self):
+		'''Returns the width of the floor.'''
 		return len(self._grid)
 
 	def height(self):
+		'''Returns the height of the floor.'''
 		return len(self._grid[0])
 
 	def inBounds(self, point):
+		'''Checks if a point is within the boundaries of the 2D floor space.'''
 		return 0 <= point[0] < self.width() and 0 <= point[1] < self.height()
 
 	def print(self, prefix = ''):
