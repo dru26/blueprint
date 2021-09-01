@@ -1,2 +1,3 @@
 from .blueprint import Blueprint
-from .rooms import HOUSE
+HOUSE = 1
+#from .rooms import HOUSE
