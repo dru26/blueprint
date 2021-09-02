@@ -4,8 +4,9 @@ from dataclasses import dataclass, field
 
 # local imports
 from room import Room
-from layout import Layout, TSHAPE
-
+from wall import Wall
+from layout import Layout, TSHAPE, SQUARE, RECT
+from params import Params, GENERIC
 # testing
 import os
 
@@ -15,12 +16,27 @@ SCALE = 12
 @dataclass(frozen = False, order = False)
 class Blueprint:
 	_layout: Layout = field()
-	_params: str = field(default="params.csv")
-	_outline: Room = field(init=False)
+	_params: Params = field()
+	_outline: Room = field(init = False)
+	_subrooms: list[Room] = field(init = False)
 
 	def __post_init__(self):
 		self._outline = self._layout.make()
 		self._generate()
+
+	def _create(self, wall, scale):
+		# Create the optimal room
+		#room = Room()
+		pass
+
+	def _generate(self):
+		for wall in self._outline.walls:
+			if len(wall.doors) == 0: continue
+			# Starting point for recursion
+			self._create(Wall(wall.p1, wall.p2, wall.doors), 'ENTRY')
+
+	def isOverlap(self, room):
+		pass
 
 	def draw(self):
 		img = Image.new('RGB', (70 * SCALE, 70 * SCALE), (255, 255, 255))
@@ -31,10 +47,5 @@ class Blueprint:
 		# TEMP
 		#os.system('atom -a img.png')
 
-	def _generate(self):
-		for wall in self._outline.walls:
-			if len(wall.doors) == 0: continue
-			print("door", wall.doors)
-
-b = Blueprint(TSHAPE)
+b = Blueprint(Layout(TSHAPE, 20), GENERIC)
 b.draw()

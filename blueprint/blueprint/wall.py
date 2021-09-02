@@ -23,3 +23,5 @@ class Wall:
 		canvas.line([self.p1 * scale, self.p2 * scale], fill = 128)
 		for door in self.doors:
 			door.draw(canvas, offset, scale)
+
+		

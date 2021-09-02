@@ -28,9 +28,8 @@ class Layout:
 			walls[0].doors.append(Door(p, HORIZONTAL))
 		return Room(walls)
 
-
 # Starting layouts
-SQUARE = Layout([Point(0, 0), Point(1,0), Point(1,1), Point(0,1)], 20)
-RECT = Layout([Point(0, 0), Point(1.5,0), Point(1.5,1), Point(0,1)], 20)
-TSHAPE = Layout([Point(1, 0), Point(2,0), Point(2,3), Point(1,3), Point(1,2),
-	Point(0,2), Point(0,1), Point(1,1)], 20)
+SQUARE = [Point(0, 0), Point(1,0), Point(1,1), Point(0,1)]
+RECT = [Point(0, 0), Point(1.5,0), Point(1.5,1), Point(0,1)]
+TSHAPE = [Point(1, 0), Point(2,0), Point(2,3), Point(1,3), Point(1,2),
+	Point(0,2), Point(0,1), Point(1,1)]
