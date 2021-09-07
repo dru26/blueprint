@@ -1,5 +1,4 @@
 # global imports
-from enum import Enum
 
 # local imports
 from point import Point

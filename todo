@@ -1,0 +1,3 @@
++ Mark walls with which side is interior and which is exterior (boolean)
++ Reduce function for rooms (only works if rectangular) which reduces them to the size of a bounding room
+	- Another function like this one but expand if less than x distance between walls
