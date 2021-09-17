@@ -22,12 +22,12 @@ class Layout:
 		walls.append(Wall((self.points[-1] * scale).round(), (self.points[0] * scale).round()))
 		room = Room(walls)
 		i = randint(0, len(room.walls) - 1)
-		if room.walls[i].direction == HORIZONTAL:
+		if room.walls[i].direction == VERTICAL:
 			y1 = min(room.walls[i].p1.y, room.walls[i].p2.y) + 1 + params.door_size
 			y2 = max(room.walls[i].p1.y, room.walls[i].p2.y) - 1 - params.door_size
 			p = Point(room.walls[i].p1.x, randint(y1, y2))
 			room.walls[i].doors.append(Door(p, room.walls[i].interior, params.door_size))
-		elif room.walls[i].direction == VERTICAL:
+		elif room.walls[i].direction == HORIZONTAL:
 			x1 = min(room.walls[i].p1.x, room.walls[i].p2.x) + 1 + params.door_size
 			x2 = max(room.walls[i].p1.x, room.walls[i].p2.x) - 1 - params.door_size
 			p = Point(randint(x1, x2), room.walls[i].p1.y)

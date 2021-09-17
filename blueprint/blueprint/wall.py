@@ -22,9 +22,9 @@ class Wall:
 
 	def __post_init__(self):
 		if self.p1.x == self.p2.x:
-			self.direction = HORIZONTAL
-		if self.p1.y == self.p2.y:
 			self.direction = VERTICAL
+		if self.p1.y == self.p2.y:
+			self.direction = HORIZONTAL
 		if self.p1.x != self.p2.x and self.p1.y != self.p2.y:
 			raise ValueError("Wall must be horizontal or vertical.")
 		self.length = Point.distance(self.p1, self.p2)
@@ -38,23 +38,23 @@ class Wall:
 			direction = self.interior
 		return Wall(push(self.p1, direction, distance), push(self.p2, direction, distance))
 
-	def extend(self, bounds, direction: Direction = None):
+	def extend(self, bounds, direction, doors = []):
 		'''Returns a copy of this Wall offset in a direction as far as possible while
 			within the bounds.'''
 		if direction == None:
 			direction = self.interior
 		if direction == SOUTH:
-			return Wall(Point(self.p1.x, bounds[3]), Point(self.p2.x, bounds[3]))
+			return Wall(Point(self.p1.x, bounds[3]), Point(self.p2.x, bounds[3]), doors = doors)
 		if direction == NORTH:
-			return Wall(Point(self.p1.x, bounds[1]), Point(self.p2.x, bounds[1]))
+			return Wall(Point(self.p1.x, bounds[1]), Point(self.p2.x, bounds[1]), doors = doors)
 		if direction == EAST:
-			return Wall(Point(bounds[2], self.p1.y), Point(bounds[2], self.p2.y))
+			return Wall(Point(bounds[2], self.p1.y), Point(bounds[2], self.p2.y), doors = doors)
 		if direction == WEST:
-			return Wall(Point(bounds[0], self.p1.y), Point(bounds[0], self.p2.y))
+			return Wall(Point(bounds[0], self.p1.y), Point(bounds[0], self.p2.y), doors = doors)
 		if direction == HORIZONTAL:
-			return Wall(Point(bounds[0], self.p1.y), Point(bounds[2], self.p2.y))
+			return Wall(Point(bounds[0], self.p1.y), Point(bounds[2], self.p2.y), doors = doors)
 		if direction == VERTICAL:
-			return Wall(Point(self.p1.x, bounds[1]), Point(self.p2.x, bounds[3]))
+			return Wall(Point(self.p1.x, bounds[1]), Point(self.p2.x, bounds[3]), doors = doors)
 
 	def draw(self, canvas: ImageDraw, offset: float, scale: float):
 		canvas.line([(self.p1 + offset) * scale, (self.p2 + offset) * scale], fill = "#5BA1B5", width = 2)

@@ -70,12 +70,13 @@ class Room:
 			wall.draw(canvas, offset, scale)
 
 	def contains(self, point):
-		'''Checks if the room contains the given point using raycasting.'''
+		'''Checks if the room contains the given point using raycasting. Returns 0
+			if not in a room, 1 if in the room, 2 if on a wall, and 3 if on a corner.'''
 		# Corner case
 		for wall in self.walls:
 			# Always return true if the point given is on a *corner*
 			if point == wall.p1 or point == wall.p2:
-				return 1
+				return 3
 		west = abs(point.x - self.bounds[0])
 		east = abs(point.x - self.bounds[2])
 		north = abs(point.y - self.bounds[1])
@@ -99,26 +100,37 @@ class Room:
 			if south == min_:
 				step = 1
 				target = south + 1
+		flag = False
 		while c <= target:
 			if direction == HORIZONTAL: p = Point(n, m)
 			else: p = Point(m, n)
 			for wall in self.walls:
 				if p.isOnPerpendicular(wall.p1, wall.p2, direction):
+					if not flag:
+						return 2
 					count += 1
 					break
+				if not flag and p.isOnPerpendicular(wall.p1, wall.p2, -direction):
+					return 2
+			flag = True
 			n += step
 			c += 1
 		return count % 2
 
-	def _updateBounds(self, x, y, outline, rooms, bounds, direction):
+	def _updateBounds(self, x, y, outline, rooms, bounds, direction, pdirection = None):
 		point = Point(x, y)
 		flag = False
-		if not outline.contains(point): flag = True
+		val = outline.contains(point)
+		if val == 0: flag = True
 		for room in rooms:
-			if room.contains(point):
+			# Must be fully inside the room
+			if room.contains(point) == 1:
 				flag = True
+				print(':`)')
 				break
 		if flag:
+			print(direction, x, y)
+			save = bounds.copy()
 			if direction == WEST: bounds[0] = x + 1
 			elif direction == NORTH: bounds[1] = y + 1
 			elif direction == EAST: bounds[2] = x - 1
@@ -155,13 +167,15 @@ class Room:
 		if len(self.walls) != 4:
 			return False
 		bounds = list(self.bounds)
-
+		print(bounds)
 		if direction == VERTICAL:
+			print(point, direction)
 			self._tree(point.x, point.y, outline, rooms, bounds, EAST)
 			self._tree(point.x, point.y, outline, rooms, bounds, WEST)
 		else:
-			self._tree(point.x, point.y, outline, rooms, bounds, NORTH)
+			print(point, direction)
 			self._tree(point.x, point.y, outline, rooms, bounds, SOUTH)
+			self._tree(point.x, point.y, outline, rooms, bounds, NORTH)
 
 		self.walls = [Wall(Point(bounds[0], bounds[1]), Point(bounds[0], bounds[3])),
 			Wall(Point(bounds[2], bounds[1]), Point(bounds[2], bounds[3]))]
