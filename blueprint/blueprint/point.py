@@ -2,11 +2,14 @@
 from dataclasses import dataclass, field
 import math
 
+# local imports
+from direction import HORIZONTAL
+
 @dataclass(frozen = True, order = False)
 class Point(tuple):
 	'''A special tuple with only two values: x and y.'''
-	x: float = field(default = 0)
-	y: float = field(default = 0)
+	x: int = field(default = 0)
+	y: int = field(default = 0)
 
 	def __new__(self, x = 0, y = 0):
 		return tuple.__new__(Point, (x, y))
@@ -16,14 +19,14 @@ class Point(tuple):
 			Point.'''
 		if not isinstance(obj, tuple): return None
 		if len(obj) != 2: return None
-		return Point(self.x + float(obj[0]), self.y + float(obj[1]))
+		return Point(int(self.x + round(obj[0])), int(self.y + round(obj[1])))
 
 	def __sub__(self, obj):
 		'''Subtracts any tuple with a length of 2 from a Point and returns a new
 			Point.'''
 		if not isinstance(obj, tuple): return None
 		if len(obj) != 2: return None
-		return Point(self.x - float(obj[0]), self.y - float(obj[1]))
+		return Point(int(self.x - round(obj[0])), int(self.y - round(obj[1])))
 
 	def __mul__(self, num):
 		'''Subtracts any tuple with a length of 2 from a Point and returns a new
@@ -41,16 +44,18 @@ class Point(tuple):
 		if p2.y <= self.y <= p1.y: y = True
 		return x and y
 
-	def isOnPerpendicular(self, p1, p2):
+	def isOnPerpendicular(self, p1, p2, direction):
 		'''Checks if the point is on a perpendicular line between
 			two unordered points. Returns False if the lines are not perpendicular.'''
 		v, h = False, False
-		if p1.x == self.x == p2.x: h = True
-		if h and p1.y <= self.y <= p2.y: v = True
-		if h and p2.y <= self.y <= p1.y: v = True
-		if p1.y == self.y == p2.y: v = True
-		if v and p1.x <= self.x <= p2.x: h = True
-		if v and p2.x <= self.x <= p1.x: h = True
+		if direction == HORIZONTAL:
+			if p1.x == self.x == p2.x: h = True
+			if p1.y <= self.y <= p2.y: v = True
+			if p2.y <= self.y <= p1.y: v = True
+		else:
+			if p1.y == self.y == p2.y: v = True
+			if p1.x <= self.x <= p2.x: h = True
+			if p2.x <= self.x <= p1.x: h = True
 		return h and v
 
 	def round(self):

@@ -2,6 +2,7 @@
 from dataclasses import dataclass, field
 import numpy as np
 from enum import Enum, auto
+from copy import deepcopy
 
 class RoomType(Enum):
 	ANY = auto()
@@ -13,6 +14,10 @@ class RoomType(Enum):
 class Policy(Enum):
 	ALLOW_DUPS = auto()
 	LIMIT_DUPS = auto()
+
+SOCIAL = RoomType.SOCIAL
+PRIVATE = RoomType.PRIVATE
+ENTRY = RoomType.ENTRY
 
 @dataclass(frozen = False, order = False)
 class RoomParams:
@@ -55,6 +60,8 @@ class Params:
 	social: float = field(default = 0.4)
 	other: float = field(default = 0.1)
 	force_private: bool = field(default = True)
+	door_size: float = field(default = 3)
+	min_gap: float = field(default = 3)
 	_social_rooms: list[RoomParams] = field(init = False, default_factory = list)
 	_private_rooms: list[RoomParams] = field(init = False, default_factory = list)
 	_entry_rooms: list[RoomParams] = field(init = False, default_factory = list)
@@ -98,8 +105,9 @@ class Params:
 		for i in range(len(self._entry_p_lst)):
 			self._entry_p_lst[i] /= sum
 
-	def next(self, lst):
-		'''Returns the next item in the list and reorders the list.'''
+	def next(self, lst: list[RoomParams]):
+		'''Returns the next item in the list and reorders the list based on this
+			parameter policy.'''
 		param = lst.pop(0)
 		if param.discard:
 			return param
@@ -114,13 +122,12 @@ class Params:
 		lst = np.random.choice(lst, size = len(lst), replace = False, p = p_lst)
 		return param
 
-	def getSocial(self):
-		return np.random.choice(self._social_rooms, size = len(self._social_rooms), replace = False, p = self._social_p_lst)
-
-	def getEntry(self, entry):
-		return np.random.choice(self._entry_rooms, size = len(self._entry_rooms), replace = False, p = self._entry_p_lst)
-
-	def getPrivate(self, entry):
-		return np.random.choice(self._private_rooms, size = len(self._private_rooms), replace = False, p = self._private_p_lst)
+	def get(self, type):
+		if type == RoomType.SOCIAL:
+			return np.random.choice(self._social_rooms, size = len(self._social_rooms), replace = False, p = self._social_p_lst).tolist()
+		if type == RoomType.ENTRY:
+			return np.random.choice(self._entry_rooms, size = len(self._entry_rooms), replace = False, p = self._entry_p_lst).tolist()
+		if type == RoomType.PRIVATE:
+			return np.random.choice(self._private_rooms, size = len(self._private_rooms), replace = False, p = self._private_p_lst).tolist()
 
 GENERIC = Params(rooms = [RoomParams(label = 'generic')])

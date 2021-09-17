@@ -6,14 +6,12 @@ import math
 from point import Point
 from direction import push, HORIZONTAL, VERTICAL, NORTH, SOUTH, EAST, WEST
 
-DWIDTH = 3
-
 @dataclass(frozen=True, order=False)
 class Door:
 	'''A passage through a wall.'''
 	center: Point = field()
 	direction: int = field()
-	width: int = field(default=DWIDTH)
+	width: int = field()
 
 	def draw(self, canvas, offset, scale):
 		if self.direction == NORTH or self.direction == SOUTH:
